@@ -31,7 +31,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             pass  # Request had trailing slash: /animals/
 
         return (resource, id)  # This is a tuple
-    
+    # ******************************* need clarification ********************************************* 36-59
     # Here's a class function
     def _set_headers(self, status):
         # Notice this Docstring also includes information about the arguments passed to the function
@@ -94,6 +94,7 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             else:
                 response = f"{get_all_customers()}"
+    # ******************************* need clarification *********************************************  99-112
 
         self.wfile.write(response.encode())
 
@@ -113,27 +114,19 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Initialize new resource
         new_resource = None
 
-        # Add a new animal to the list. Don't worry about
-        # the orange squiggle, you'll define the create_animal
-        # function next.
+        # Add a new animal to the list.
         if resource == "animals":
             new_resource = create_animal(post_body)
 
-        # Add a new location to the list. Don't worry about
-        # the orange squiggle, you'll define the create_location
-        # function next.
+        # Add a new location to the list.
         if resource == "locations":
             new_resource = create_location(post_body)
 
-        # Add a new employee to the list. Don't worry about
-        # the orange squiggle, you'll define the create_employee
-        # function next.
+        # Add a new employee to the list. 
         if resource == "employees":
             new_resource = create_employee(post_body)
 
-        # Add a new customer to the list. Don't worry about
-        # the orange squiggle, you'll define the create_customer
-        # function next.
+        # Add a new customer to the list. 
         if resource == "customers":
             new_resource = create_customer(post_body)
 
@@ -198,6 +191,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
+
+    # ******************************* need clarification ********************************************* 199-208
 
 # This function is not inside the class. It is the starting
 # point of this application.
