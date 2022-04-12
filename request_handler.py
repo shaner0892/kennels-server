@@ -153,8 +153,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Convert JSON string to a Python dictionary
         post_body = json.loads(post_body)
 
+# ******************** why do you need id if it's not being used? ************
         # Parse the URL
-        (resource, id) = self.parse_url(self.path)
+        ( resource, id ) = self.parse_url(self.path)
 
         # Initialize new resource
         new_resource = None
@@ -164,15 +165,15 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_resource = create_animal(post_body)
 
         # Add a new location to the list.
-        if resource == "locations":
+        elif resource == "locations":
             new_resource = create_location(post_body)
 
-        # Add a new employee to the list. 
-        if resource == "employees":
+        # Add a new employee to the list.
+        elif resource == "employees":
             new_resource = create_employee(post_body)
 
-        # Add a new customer to the list. 
-        if resource == "customers":
+        # Add a new customer to the list.
+        elif resource == "customers":
             new_resource = create_customer(post_body)
 
         # Encode the new resource and send in response
