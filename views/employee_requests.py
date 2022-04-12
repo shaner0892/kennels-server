@@ -1,7 +1,7 @@
 import sqlite3
 import json
 from models import Employee
-
+from models.location import Location
 
 EMPLOYEES = [
     {
@@ -30,10 +30,6 @@ EMPLOYEES = [
     }
 ]
 
-
-# def get_all_employees():
-#     return EMPLOYEES
-
 def get_all_employees():
     # Open a connection to the database
     with sqlite3.connect("./kennel.sqlite3") as conn:
@@ -48,8 +44,12 @@ def get_all_employees():
             e.id,
             e.name,
             e.address,
-            e.location_id
-        FROM employee e
+            e.location_id,
+            l.name location_name,
+            l.address location_address
+        FROM Employee e
+        JOIN Location l
+            ON l.id = e.location_id
         """)
 
         # Initialize an empty list to hold all employee representations
@@ -66,27 +66,19 @@ def get_all_employees():
             # exact order of the parameters defined in the
             # Employee class above.
             employee = Employee(row['id'], row['name'], row['address'],
-                            row['location_id'])
+                                row['location_id'])
+            
+            # Create a Location instance from the current row
+            location = Location(row['location_id'], row['location_name'], 
+                                row['location_address'])
+
+            # Add the dictionary representation of the location to the employee
+            employee.location = location.__dict__
 
             employees.append(employee.__dict__)
 
     # Use `json` package to properly serialize list as JSON
     return json.dumps(employees)
-
-# # Function with a single parameter
-# def get_single_employee(id):
-#     # Variable to hold the found employee, if it exists
-#     requested_employee = None
-
-#     # Iterate the EMPLOYEES list above. Very similar to the
-#     # for..of loops you used in JavaScript.
-#     for employee in EMPLOYEES:
-#         # Dictionaries in Python use [] notation to find a key
-#         # instead of the dot notation that JavaScript used.
-#         if employee["id"] == id:
-#             requested_employee = employee
-
-#     return requested_employee
 
 def get_single_employee(id):
     with sqlite3.connect("./kennel.sqlite3") as conn:
@@ -172,15 +164,7 @@ def delete_employee(id):
     # If the employee was found, use pop(int) to remove it from list
     if employee_index >= 0:
         EMPLOYEES.pop(employee_index)
-        
-# def update_employee(id, new_employee):
-#     # Iterate the EMPLOYEES list, but use enumerate() so that
-#     # you can access the index value of each item.
-#     for index, employee in enumerate(EMPLOYEES):
-#         if employee["id"] == id:
-#             # Found the employee. Update the value.
-#             EMPLOYEES[index] = new_employee
-#             break
+
 
 def update_employee(id, new_employee):
     with sqlite3.connect("./kennel.sqlite3") as conn:
